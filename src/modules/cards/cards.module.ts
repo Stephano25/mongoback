@@ -4,12 +4,11 @@ import { Card, CardSchema } from '../../schemas/card.schema';
 import { CardsController } from './cards.controller';
 import { CardsService } from './cards.service';
 
-
 @Module({
-imports: [
-MongooseModule.forFeature([{ name: Card.name, schema: CardSchema }]),
-],
-controllers: [CardsController],
-providers: [CardsService],
+    imports: [
+        MongooseModule.forFeature([{ name: Card.name, schema: CardSchema }]),
+    ],
+    controllers: [CardsController],
+    providers: [CardsService],
 })
 export class CardsModule {}

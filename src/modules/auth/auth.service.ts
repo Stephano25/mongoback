@@ -1,31 +1,40 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
-import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
-import { User } from '../../schemas/user.schema';
+import { Injectable } from '@nestjs/common';
+import { JwtService } from '@nestjs/jwt';
+import { UsersService } from '../users/users.service';
 import * as bcrypt from 'bcrypt';
-import * as jwt from 'jsonwebtoken';
 
 @Injectable()
 export class AuthService {
-  constructor(@InjectModel(User.name) private userModel: Model<User>) {}
+  constructor(
+    private usersService: UsersService,
+    private jwtService: JwtService
+  ) {}
+
+  async validateUser(email: string, pass: string): Promise<any> {
+    const user = await this.usersService.findByEmail(email);
+    if (user && await bcrypt.compare(pass, user.password)) {
+      const { password, ...result } = user;
+      return result;
+    }
+    return null;
+  }
+
+  async login(user: any) {
+    const payload = { email: user.email, sub: user._id };
+    return {
+      access_token: this.jwtService.sign(payload),
+    };
+  }
 
   async register(email: string, password: string) {
     const hashed = await bcrypt.hash(password, 10);
-    const user = await this.userModel.create({ email, password: hashed });
-    return { message: 'User registered', userId: user._id };
+    return this.usersService.create({ email, password: hashed });
   }
 
-  async login(email: string, password: string) {
-    const user = await this.userModel.findOne({ email });
-    if (!user) throw new UnauthorizedException('Invalid credentials');
-
-    const match = await bcrypt.compare(password, user.password);
-    if (!match) throw new UnauthorizedException('Invalid credentials');
-
-    const token = jwt.sign({ sub: user._id, email: user.email }, 'SECRET_KEY', {
-      expiresIn: '1d',
-    });
-
-    return { access_token: token };
+  async refresh(user: any) {
+    const payload = { email: user.email, sub: user._id };
+    return {
+      access_token: this.jwtService.sign(payload),
+    };
   }
 }

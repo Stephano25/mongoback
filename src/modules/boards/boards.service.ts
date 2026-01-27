@@ -14,4 +14,8 @@ export class BoardsService {
   findAll() {
     return this.model.find();
   }
+
+  findById(id: string) {
+    return this.model.findById(id);
+  }
 }

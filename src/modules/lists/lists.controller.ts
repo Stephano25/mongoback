@@ -6,7 +6,7 @@ export class ListsController {
   constructor(private service: ListsService) {}
 
   @Post()
-  create(@Body() body: any) {
+  create(@Body() body: { boardId: string; title: string; position: number }) {
     return this.service.create(body.boardId, body.title, body.position);
   }
 

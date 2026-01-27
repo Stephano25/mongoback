@@ -14,4 +14,16 @@ export class CardsService {
   findByList(listId: string) {
     return this.model.find({ listId }).sort({ position: 1 });
   }
+
+  async updatePositions(listId: string, cards: any[]) { 
+    // Met à jour chaque carte avec sa nouvelle position 
+    const updates = cards.map((card, index) => 
+        this.model.updateOne( 
+        { _id: card._id, listId }, 
+        { $set: { position: index } } 
+        ) 
+    ); 
+    await Promise.all(updates); 
+    return { success: true }; 
+  }
 }

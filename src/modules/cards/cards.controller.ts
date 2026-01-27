@@ -14,4 +14,10 @@ export class CardsController {
   findByList(@Param('listId') listId: string) {
     return this.service.findByList(listId);
   }
+
+  @Post('update-positions') 
+  updatePositions(@Body() body: { 
+    listId: string; cards: any[] }) { 
+        return this.service.updatePositions(body.listId, body.cards); 
+  }
 }

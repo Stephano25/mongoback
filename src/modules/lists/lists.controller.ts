@@ -14,4 +14,9 @@ export class ListsController {
   findByBoard(@Param('boardId') boardId: string) {
     return this.service.findByBoard(boardId);
   }
+
+  @Post('update-positions')
+  updatePositions(@Body() body: { boardId: string; lists: any[] }) {
+    return this.service.updatePositions(body.boardId, body.lists);
+  }
 }

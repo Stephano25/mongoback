@@ -5,10 +5,7 @@ import { Board } from '../../schemas/board.schema';
 
 @Injectable()
 export class BoardsService {
-  constructor(
-    @InjectModel(Board.name)
-    private readonly model: Model<Board>,
-  ) {}
+  constructor(@InjectModel(Board.name) private readonly model: Model<Board>) {}
 
   create(title: string) {
     return this.model.create({ title });

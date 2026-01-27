@@ -3,15 +3,15 @@ import { CardsService } from './cards.service';
 
 @Controller('cards')
 export class CardsController {
-    constructor(private service: CardsService) {}
+  constructor(private service: CardsService) {}
 
-    @Post()
-    create(@Body() body: any) {
-        return this.service.create(body.listId, body.title, body.position);
-    }
+  @Post()
+  create(@Body() body: any) {
+    return this.service.create(body.listId, body.title, body.position);
+  }
 
-    @Get(':listId')
-    findByList(@Param('listId') listId: string) {
-        return this.service.findByList(listId);
-    }
+  @Get(':listId')
+  findByList(@Param('listId') listId: string) {
+    return this.service.findByList(listId);
+  }
 }

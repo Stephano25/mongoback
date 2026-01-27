@@ -4,14 +4,9 @@ import { Board, BoardSchema } from '../../schemas/board.schema';
 import { BoardsController } from './boards.controller';
 import { BoardsService } from './boards.service';
 
-
 @Module({
-    imports: [
-        MongooseModule.forFeature([
-            { name: Board.name, schema: BoardSchema },
-        ]),
-    ],
-    controllers: [BoardsController],
-    providers: [BoardsService],
+  imports: [MongooseModule.forFeature([{ name: Board.name, schema: BoardSchema }])],
+  controllers: [BoardsController],
+  providers: [BoardsService],
 })
 export class BoardsModule {}

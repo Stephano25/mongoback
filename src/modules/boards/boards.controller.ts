@@ -1,32 +1,33 @@
-import { Controller, Get, Post, Put, Delete, Body, Param } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Delete, Put } from '@nestjs/common';
 import { BoardsService } from './boards.service';
+import { Board } from '../../schemas/board.schema'; // ✅ import corrigé
 
 @Controller('boards')
 export class BoardsController {
-  constructor(private service: BoardsService) {}
+  constructor(private readonly service: BoardsService) {}
 
   @Get()
-  findAll() {
+  async findAll(): Promise<Board[]> {
     return this.service.findAll();
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
+  async findOne(@Param('id') id: string): Promise<Board | null> { // ✅ type corrigé
     return this.service.findOne(id);
   }
 
   @Post()
-  create(@Body() body: { title: string }) {
+  async create(@Body() body: { title: string }): Promise<Board> {
     return this.service.create(body.title);
   }
 
   @Put(':id')
-  update(@Param('id') id: string, @Body() body: { title: string }) {
+  async update(@Param('id') id: string, @Body() body: { title: string }): Promise<Board | null> { // ✅ type corrigé
     return this.service.update(id, body.title);
   }
 
   @Delete(':id')
-  delete(@Param('id') id: string) {
+  async delete(@Param('id') id: string): Promise<void> {
     return this.service.delete(id);
   }
 }

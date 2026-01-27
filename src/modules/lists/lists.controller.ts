@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Param } from '@nestjs/common';
+import { Controller, Get, Post, Delete, Body, Param } from '@nestjs/common'; // ✅ ajout Delete
 import { ListsService } from './lists.service';
 
 @Controller('lists')
@@ -18,5 +18,10 @@ export class ListsController {
   @Post('update-positions')
   updatePositions(@Body() body: { boardId: string; lists: any[] }) {
     return this.service.updatePositions(body.boardId, body.lists);
+  }
+
+  @Delete(':id')
+  async delete(@Param('id') id: string): Promise<void> {
+    return this.service.delete(id);
   }
 }

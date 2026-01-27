@@ -25,4 +25,8 @@ export class ListsService {
     await Promise.all(updates);
     return { success: true };
   }
+
+  async delete(id: string): Promise<void> {
+    await this.model.findByIdAndDelete(id).exec(); // ✅ corrigé (model au lieu de listModel)
+  }
 }

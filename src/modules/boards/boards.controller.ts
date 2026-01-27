@@ -1,33 +1,34 @@
-import { Controller, Get, Post, Body, Param, Delete, Put } from '@nestjs/common';
+import { Controller, Get, Post, Put, Delete, Param, Body, UseGuards } from '@nestjs/common';
 import { BoardsService } from './boards.service';
-import { Board } from '../../schemas/board.schema'; // ✅ import corrigé
+import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 
 @Controller('boards')
+@UseGuards(JwtAuthGuard) // ✅ protège toutes les routes
 export class BoardsController {
-  constructor(private readonly service: BoardsService) {}
+  constructor(private readonly boardsService: BoardsService) {}
 
   @Get()
-  async findAll(): Promise<Board[]> {
-    return this.service.findAll();
+  async getBoards() {
+    return this.boardsService.findAll();
   }
 
   @Get(':id')
-  async findOne(@Param('id') id: string): Promise<Board | null> { // ✅ type corrigé
-    return this.service.findOne(id);
+  async getBoard(@Param('id') id: string) {
+    return this.boardsService.findOne(id);
   }
 
   @Post()
-  async create(@Body() body: { title: string }): Promise<Board> {
-    return this.service.create(body.title);
+  async createBoard(@Body('title') title: string) {
+    return this.boardsService.create(title);
   }
 
   @Put(':id')
-  async update(@Param('id') id: string, @Body() body: { title: string }): Promise<Board | null> { // ✅ type corrigé
-    return this.service.update(id, body.title);
+  async updateBoard(@Param('id') id: string, @Body('title') title: string) {
+    return this.boardsService.update(id, title);
   }
 
   @Delete(':id')
-  async delete(@Param('id') id: string): Promise<void> {
-    return this.service.delete(id);
+  async deleteBoard(@Param('id') id: string) {
+    return this.boardsService.delete(id);
   }
 }
